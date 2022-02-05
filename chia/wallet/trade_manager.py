@@ -258,7 +258,7 @@ class TradeManager:
             coins_to_offer: Dict[uint32, List[Coin]] = {}
             requested_payments: Dict[Optional[bytes32], List[Payment]] = {}
             for id, amount in offer_dict.items():
-                if amount > 0:
+                if amount >= 0:
                     if isinstance(id, int):
                         wallet_id = uint32(id)
                         wallet = self.wallet_state_manager.wallets[wallet_id]
@@ -284,8 +284,6 @@ class TradeManager:
                     if balance < abs(amount):
                         raise Exception(f"insufficient funds in wallet {wallet_id}")
                     coins_to_offer[wallet_id] = await wallet.select_coins(uint64(abs(amount)))
-                elif amount == 0:
-                    raise ValueError("You cannot offer nor request 0 amount of something")
 
             all_coins: List[Coin] = [c for coins in coins_to_offer.values() for c in coins]
             notarized_payments: Dict[Optional[bytes32], List[NotarizedPayment]] = Offer.notarize_payments(

@@ -92,8 +92,6 @@ class Offer:
     def __post_init__(self):
         # Verify that there is at least something being offered
         offered_coins: Dict[bytes32, List[Coin]] = self.get_offered_coins()
-        if offered_coins == {}:
-            raise ValueError("Bundle is not offering anything")
 
         # Verify that there are no duplicate payments
         for payments in self.requested_payments.values():

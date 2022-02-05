@@ -92,6 +92,7 @@ class WalletRpcApi:
             "/cat_spend": self.cat_spend,
             "/cat_get_asset_id": self.cat_get_asset_id,
             "/create_offer_for_ids": self.create_offer_for_ids,
+            "/aggregate_offers": self.aggregate_offers,
             "/get_offer_summary": self.get_offer_summary,
             "/check_offer_validity": self.check_offer_validity,
             "/take_offer": self.take_offer,
@@ -887,6 +888,16 @@ class WalletRpcApi:
                 "trade_record": trade_record.to_json_dict_convenience(),
             }
         raise ValueError(error)
+
+    async def aggregate_offers(self, request):
+        offer_strings: List[str] = request["offers"]
+        offers = []
+        for offer_hex in offer_strings:
+            offers.append(Offer.from_bech32(offer_hex))
+        aggregated_offer = Offer.aggregate(offers)
+        return {
+            "offer": aggregated_offer.to_bech32()
+        }
 
     async def get_offer_summary(self, request):
         assert self.service.wallet_state_manager is not None
