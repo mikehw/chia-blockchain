@@ -458,6 +458,7 @@ class TestWalletRpc:
             assert offer is None
 
             offer, trade_record = await client.create_offer_for_ids({uint32(1): -5, cat_0_id: 1}, fee=uint64(1))
+
             summary = await client.get_offer_summary(offer)
             assert summary == {"offered": {"xch": 5}, "requested": {col.hex(): 1}}
 
@@ -487,7 +488,7 @@ class TestWalletRpc:
             assert len(all_offers) == 2
 
             aggregated_offer = await client.aggregate_offers([offer, new_offer])
-            aggregated_offer_summary = await client.get_offer_summary(aggregated_offer);
+            aggregated_offer_summary = await client.get_offer_summary(aggregated_offer)
             assert aggregated_offer_summary == {"offered": {"xch": 10}, "requested": {col.hex(): 2}}
 
             await asyncio.sleep(1)

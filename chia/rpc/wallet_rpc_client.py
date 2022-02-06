@@ -435,7 +435,7 @@ class WalletRpcClient(RpcClient):
 
     async def aggregate_offers(self, offers: List[Offer]) -> Offer:
         assert len(offers) > 1
-        res = await self.fetch("aggregate_offers", {"offers": [offer.to_bech32() for offer in offers]});
+        res = await self.fetch("aggregate_offers", {"offers": [offer.to_bech32() for offer in offers]})
         return Offer.from_bech32(res["offer"])
 
     async def get_offer_summary(self, offer: Offer) -> Dict[str, Dict[str, int]]:

@@ -891,13 +891,9 @@ class WalletRpcApi:
 
     async def aggregate_offers(self, request):
         offer_strings: List[str] = request["offers"]
-        offers = []
-        for offer_hex in offer_strings:
-            offers.append(Offer.from_bech32(offer_hex))
+        offers = [Offer.from_bech32(offer_hex) for offer_hex in offer_strings]
         aggregated_offer = Offer.aggregate(offers)
-        return {
-            "offer": aggregated_offer.to_bech32()
-        }
+        return {"offer": aggregated_offer.to_bech32()}
 
     async def get_offer_summary(self, request):
         assert self.service.wallet_state_manager is not None
